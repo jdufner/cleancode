@@ -8,49 +8,73 @@ import java.util.Scanner;
  */
 public class TakeGame implements Game {
 
-  private Scanner scanner = new Scanner(System.in);
-  private int[] MOVES = {3, 1, 1, 2};
   private int stones;
-  private boolean gameover;
+  private Players currentPlayer;
+  private static final int MOVES[] = {3, 1, 1, 2};
+
+  private enum Players {
+    PLAYER, COMPUTER;
+  }
 
   public TakeGame() {
     stones = 23;
-    gameover = false;
+    currentPlayer = Players.PLAYER;
   }
 
   @Override
   public void play() {
-    while (!gameover) {
+    while(!isGameOver()) {
+      doMove();
+    }
+  }
+
+  private void doMove() {
+    if (currentPlayer == Players.PLAYER) {
       playerMove();
+    } else {
       computerMove();
     }
   }
 
   private void playerMove() {
+    int move = retrievePlayerMove();
+    stones -= move;
+    currentPlayer = Players.COMPUTER;
+  }
+
+  private int retrievePlayerMove() {
     int move;
     while (true) {
-      System.out.println("Der aktuelle Spielstand ist " + stones + " Steine. Geben Sie eine Zahl 1, 2, 3 ein.");
-      move = scanner.nextInt();
+      System.out.println("Es gibt " + stones + " Steine. Bitte nehmen Sie 1, 2 oder 3!");
+      move = new Scanner(System.in).nextInt();
       if (move >= 1 && move <= 3) break;
-      System.out.println("Falsche Eingabe.");
+      System.out.println("Falsche Eingabe");
     }
-    stones -= move;
+    return move;
   }
 
   private void computerMove() {
-    if (stones <= 0) {
-      gameover = true;
-      System.out.println("Loser!");
-      return;
-    }
-    if (stones == 1) {
-      gameover = true;
-      System.out.println("Glückwunsch. Sie haben gewonnen");
-      return;
-    }
-    int move = MOVES[stones % 4];
-    System.out.println("Ich nehme " + move + " Steine.");
+    int move = retrieveComputerMove();
     stones -= move;
+    currentPlayer = Players.PLAYER;
+  }
+
+  private int retrieveComputerMove() {
+    int move = MOVES[stones % 4];
+    System.out.println("Ich nehme " +  move + " Steine.");
+    return move;
+  }
+
+  private boolean isGameOver() {
+    return hasLost();
+  }
+
+  private boolean hasLost() {
+    if (stones <= 0) {
+      System.out.println("Der Gewinner ist " + currentPlayer);
+      return true;
+    }
+    return false;
   }
 
 }
