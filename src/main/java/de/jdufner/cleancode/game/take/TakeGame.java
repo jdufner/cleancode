@@ -1,4 +1,4 @@
-package de.jdufner.cleancode.game;
+package de.jdufner.cleancode.game.take;
 
 import java.util.Scanner;
 
@@ -8,6 +8,7 @@ import java.util.Scanner;
  */
 public class TakeGame implements Game {
 
+  private Scanner scanner = new Scanner(System.in);
   private int[] MOVES = {3, 1, 1, 2};
   private int stones;
   private boolean gameover;
@@ -17,6 +18,7 @@ public class TakeGame implements Game {
     gameover = false;
   }
 
+  @Override
   public void play() {
     while (!gameover) {
       playerMove();
@@ -27,24 +29,28 @@ public class TakeGame implements Game {
   private void playerMove() {
     int move;
     while (true) {
-      System.out.println("Der aktuelle Spielstand ist " + stones + ". Geben Sie eine Zahl 1, 2, 3 ein.");
-      move = new Scanner(System.in).nextInt();
+      System.out.println("Der aktuelle Spielstand ist " + stones + " Steine. Geben Sie eine Zahl 1, 2, 3 ein.");
+      move = scanner.nextInt();
       if (move >= 1 && move <= 3) break;
+      System.out.println("Falsche Eingabe.");
     }
     stones -= move;
   }
 
   private void computerMove() {
+    if (stones <= 0) {
+      gameover = true;
+      System.out.println("Loser!");
+      return;
+    }
     if (stones == 1) {
       gameover = true;
       System.out.println("Glückwunsch. Sie haben gewonnen");
       return;
     }
-    if (stones <= 0) {
-      gameover = true;
-      System.out.println("Loser!");
-    }
-    stones -= MOVES[stones % 4];
+    int move = MOVES[stones % 4];
+    System.out.println("Ich nehme " + move + " Steine.");
+    stones -= move;
   }
 
 }

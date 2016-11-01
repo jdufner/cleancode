@@ -1,6 +1,6 @@
-package de.jdufner.cleanclode.client;
+package de.jdufner.cleancode.game.client;
 
-import de.jdufner.cleancode.game.Game;
+import de.jdufner.cleancode.game.take.Game;
 
 /**
  * @author Jürgen Dufner

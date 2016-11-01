@@ -1,4 +1,4 @@
-package de.jdufner.cleancode.game;
+package de.jdufner.cleancode.game.take;
 
 /**
  * @author Jürgen Dufner
@@ -7,4 +7,5 @@ package de.jdufner.cleancode.game;
 public interface Game {
 
   void play();
+
 }
